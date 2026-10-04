@@ -1,0 +1,27 @@
+{
+  "name": "devflow_extension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:js": "esbuild js/app.js --bundle --outfile=js/bundle.js",
+    "build:css": "./tailwindcss-linux-x64 -i css/input.css -o css/tailwind.min.css --minify",
+    "build": "npm run build:js && npm run build:css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "esbuild": "^0.28.2",
+    "firebase": "^12.19.0",
+    "lucide": "^1.47.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.3.3"
+  }
+}

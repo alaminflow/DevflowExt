@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevFlow</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="css/tailwind.min.css" rel="stylesheet" />
+  </head>
+  <body class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="sidebar w-64 flex flex-col p-6 shrink-0 overflow-y-auto">
+      <div class="flex items-center gap-3 mb-10">
+        <div class="p-2 bg-indigo-600 rounded-lg">
+          <i data-lucide="terminal" class="w-6 h-6 text-white"></i>
+        </div>
+        <h1 class="text-xl font-bold tracking-tight">DevFlow</h1>
+      </div>
+
+      <nav class="flex-1 space-y-2" id="sidebar-nav">
+        <div
+          data-action="switchProfile" data-arg="home"
+          class="nav-item active"
+          data-profile="home"
+        >
+          <i data-lucide="home" class="w-5 h-5"></i>
+          <span class="font-medium">Home</span>
+        </div>
+        <div
+          data-action="switchProfile" data-arg="work"
+          class="nav-item"
+          data-profile="work"
+        >
+          <i data-lucide="briefcase" class="w-5 h-5"></i>
+          <span class="font-medium">Work</span>
+        </div>
+        <div data-action="switchProfile" data-arg="dev" class="nav-item" data-profile="dev">
+          <i data-lucide="code-2" class="w-5 h-5"></i>
+          <span class="font-medium">Dev</span>
+        </div>
+        <div
+          data-action="switchProfile" data-arg="learning"
+          class="nav-item"
+          data-profile="learning"
+        >
+          <i data-lucide="book-open" class="w-5 h-5"></i>
+          <span class="font-medium">Learning</span>
+        </div>
+        <div class="pt-4 mt-4 border-t border-white/5 space-y-2">
+          <div
+            data-action="openModal" data-arg="toolsModal"
+            class="nav-item text-gray-400 hover:text-white"
+          >
+            <i data-lucide="wrench" class="w-5 h-5"></i>
+            <span>Tools</span>
+          </div>
+          <div
+            data-action="openModal" data-arg="bookmarksViewModal"
+            class="nav-item text-gray-400 hover:text-white"
+          >
+            <i data-lucide="bookmark" class="w-5 h-5"></i>
+            <span>Bookmarks</span>
+          </div>
+          <div
+            data-action="openModal" data-arg="notesModal"
+            class="nav-item text-gray-400 hover:text-white"
+          >
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+            <span>Notes</span>
+          </div>
+        </div>
+      </nav>
+
+      <div class="mt-auto space-y-4">
+        <button
+          data-action="openModal" data-arg="addLinkModal"
+          class="w-full py-3 border border-white/10 rounded-xl hover:bg-white/5 transition flex items-center justify-center gap-2"
+        >
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>Add Link</span>
+        </button>
+        <div class="flex items-center justify-between px-2 text-gray-400">
+          <button data-action="toggleTheme" class="hover:text-white transition">
+            <i data-lucide="moon" class="w-5 h-5"></i>
+          </button>
+          <button
+            data-action="openModal" data-arg="settingsModal"
+            class="hover:text-white transition"
+          >
+            <i data-lucide="settings" class="w-5 h-5"></i>
+          </button>
+          <button class="hover:text-white transition">
+            <i data-lucide="log-out" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-8 bg-[#0F111A]">
+      <header class="flex justify-between items-start mb-8">
+        <div>
+          <h2 id="greeting" class="text-3xl font-bold mb-1">
+            Good Morning, Developer! 👋
+          </h2>
+          <p id="current-date" class="text-gray-400">Tuesday, 21 May 2024</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <button
+              data-action="toggleNotifications"
+              class="p-2 hover:bg-white/5 rounded-full transition relative"
+            >
+              <i data-lucide="bell" class="w-6 h-6"></i>
+              <span
+                id="notif-dot"
+                class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full hidden"
+              ></span>
+            </button>
+            <!-- Notification Panel -->
+            <div
+              id="notif-panel"
+              class="absolute right-0 mt-2 w-80 card p-4 shadow-2xl hidden z-50"
+            >
+              <div class="flex justify-between items-center mb-4">
+                <h4 class="font-bold">Notifications</h4>
+                <button
+                  data-action="clearNotifications"
+                  class="text-xs text-indigo-400 hover:underline"
+                >
+                  Clear all
+                </button>
+              </div>
+              <div id="notif-list" class="space-y-3 text-sm text-gray-400">
+                <p class="text-center py-4">No new notifications</p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex items-center gap-3 cursor-pointer group"
+            data-action="openModal" data-arg="profileModal"
+          >
+            <div
+              id="user-avatar"
+              class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white border-2 border-white/10 group-hover:border-indigo-500 transition overflow-hidden"
+            >
+              D
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Search Bar -->
+      <div class="relative mb-10 max-w-3xl">
+        <div class="search-container flex items-center px-5 py-4 gap-4">
+          <i data-lucide="search" class="w-5 h-5 text-gray-500"></i>
+          <input
+            type="text"
+            id="main-search"
+            placeholder="Search the web or your bookmarks..."
+            class="bg-transparent border-none outline-none flex-1 text-lg placeholder:text-gray-600"
+          />
+          <div
+            class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded border border-white/10"
+          >
+            Ctrl / ⌘ K
+          </div>
+        </div>
+        <!-- Search Suggestions -->
+        <div
+          id="search-suggestions"
+          class="absolute top-full left-0 right-0 mt-2 card shadow-2xl z-50 hidden max-h-60 overflow-y-auto"
+        ></div>
+      </div>
+
+      <div class="grid grid-cols-12 gap-6">
+        <!-- Left Column (Main Content) -->
+        <div class="col-span-8 space-y-6">
+          <!-- Quick Access -->
+          <section class="card p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-bold text-lg">Quick Access</h3>
+              <button
+                data-action="toggleEditMode"
+                id="edit-mode-btn"
+                class="text-indigo-400 hover:underline text-sm"
+              >
+                Edit
+              </button>
+            </div>
+            <div id="quick-access-grid" class="grid grid-cols-6 gap-6">
+              <!-- Dynamic content -->
+            </div>
+          </section>
+
+          <div class="grid grid-cols-2 gap-6">
+            <!-- Upcoming -->
+            <section class="card p-6">
+              <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="calendar" class="w-5 h-5 text-indigo-400"></i>
+                  <h3 class="font-bold">Upcoming</h3>
+                </div>
+                <button
+                  data-action="openModal" data-arg="addEventModal"
+                  class="text-gray-500 hover:text-white transition"
+                >
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <div id="events-list" class="space-y-4">
+                <!-- Dynamic content -->
+              </div>
+              <button
+                data-action="openGoogleCalendar"
+                class="mt-6 inline-flex items-center gap-2 text-indigo-400 hover:underline text-sm"
+              >
+                View Calendar <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </section>
+
+            <!-- Projects -->
+            <section class="card p-6">
+              <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="code" class="w-5 h-5 text-indigo-400"></i>
+                  <h3 class="font-bold">Projects</h3>
+                </div>
+                <button
+                  data-action="openModal" data-arg="addProjectModal"
+                  class="text-gray-500 hover:text-white transition"
+                >
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <div id="projects-list" class="space-y-6">
+                <!-- Dynamic content -->
+              </div>
+              <button
+                data-action="openModal" data-arg="projectsViewModal"
+                class="mt-6 flex items-center gap-2 text-indigo-400 hover:underline text-sm ml-auto"
+              >
+                View All <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </section>
+          </div>
+
+          <!-- Quote Card -->
+          <section
+            data-action="rotateQuote"
+            class="card p-6 cursor-pointer hover:bg-white/[0.02] transition group"
+          >
+            <div class="flex gap-4">
+              <i
+                data-lucide="quote"
+                class="w-8 h-8 text-indigo-500 shrink-0 opacity-50 group-hover:opacity-100 transition"
+              ></i>
+              <div>
+                <p id="quote-text" class="text-lg italic text-gray-300 mb-2">
+                  "The best way to predict the future is to create it."
+                </p>
+                <p id="quote-author" class="text-sm text-gray-500">
+                  — Peter Drucker
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column (Sidebar Widgets) -->
+        <div class="col-span-4 space-y-6">
+          <!-- Weather Widget -->
+          <section
+            class="card p-6 bg-gradient-to-br from-[#161B22] to-[#1C2128]"
+          >
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex items-center gap-2 text-gray-400 text-sm">
+                <i data-lucide="map-pin" class="w-4 h-4"></i>
+                <span id="weather-location">Detecting...</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mb-8">
+              <div id="weather-icon-container">
+                <i data-lucide="sun" class="w-16 h-16 text-yellow-400"></i>
+              </div>
+              <div class="text-right">
+                <div id="weather-temp" class="text-5xl font-bold">--°C</div>
+                <div id="weather-desc" class="text-gray-400">Clear Sky</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div class="text-xs text-gray-500 mb-1">Humidity</div>
+                <div id="weather-humidity" class="font-medium">--%</div>
+              </div>
+              <div>
+                <div class="text-xs text-gray-500 mb-1">Wind</div>
+                <div id="weather-wind" class="font-medium">-- km/h</div>
+              </div>
+              <div>
+                <div class="text-xs text-gray-500 mb-1">AQI</div>
+                <div id="weather-aqi" class="font-medium text-green-400">
+                  -- Good
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- To-Do List -->
+          <section class="card p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-bold">To Do List</h3>
+              <button
+                data-action="openModal" data-arg="addTaskModal"
+                class="text-gray-500 hover:text-white transition flex items-center gap-1 text-sm"
+              >
+                <i data-lucide="plus" class="w-4 h-4"></i> Add Task
+              </button>
+            </div>
+            <div id="todo-list" class="space-y-3">
+              <!-- Dynamic content -->
+            </div>
+          </section>
+
+          <!-- Bookmarks -->
+          <section class="card p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-bold">Bookmarks</h3>
+              <button
+                data-action="openModal" data-arg="bookmarksViewModal"
+                class="text-gray-500 hover:text-white transition text-sm"
+              >
+                View All
+                <i data-lucide="arrow-right" class="w-4 h-4 inline"></i>
+              </button>
+            </div>
+            <div id="bookmarks-list" class="space-y-3">
+              <!-- Dynamic content -->
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modals Container -->
+    <div
+      id="modal-container"
+      class="fixed inset-0 modal-backdrop hidden z-[100] flex items-center justify-center p-4 overflow-y-auto"
+    >
+      <!-- Add Link Modal -->
+      <div
+        id="addLinkModal"
+        class="modal-content card w-full max-w-md p-6 hidden my-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">Add Quick Access Link</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">Name</label>
+            <input
+              type="text"
+              id="link-name"
+              class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+              placeholder="Google"
+            />
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">URL</label>
+            <input
+              type="text"
+              id="link-url"
+              class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+              placeholder="https://google.com"
+            />
+          </div>
+          <div class="flex gap-3 mt-6">
+            <button
+              data-action="closeModal"
+              class="flex-1 py-3 rounded-lg hover:bg-white/5 transition"
+            >
+              Cancel
+            </button>
+            <button
+              data-action="saveNewLink"
+              class="flex-1 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+            >
+              Save Link
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Project Modal -->
+      <div
+        id="addProjectModal"
+        class="modal-content card w-full max-w-md p-6 hidden my-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">Add New Project</h3>
+        <div class="space-y-4">
+          <input
+            type="text"
+            id="proj-name"
+            class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            placeholder="Project Name"
+          />
+          <input
+            type="text"
+            id="proj-stack"
+            class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            placeholder="Tech Stack (e.g. React, Node.js)"
+          />
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">Progress (%)</label>
+            <input
+              type="number"
+              id="proj-progress"
+              min="0"
+              max="100"
+              class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+              value="0"
+            />
+          </div>
+          <div class="flex gap-3 mt-6">
+            <button
+              data-action="closeModal"
+              class="flex-1 py-3 rounded-lg hover:bg-white/5 transition"
+            >
+              Cancel
+            </button>
+            <button
+              data-action="saveNewProject"
+              class="flex-1 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+            >
+              Add Project
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Event Modal -->
+      <div
+        id="addEventModal"
+        class="modal-content card w-full max-w-md p-6 hidden my-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">Add New Event</h3>
+        <div class="space-y-4">
+          <input
+            type="text"
+            id="event-name"
+            class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            placeholder="Event Name"
+          />
+          <input
+            type="date"
+            id="event-date"
+            class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+          />
+          <input
+            type="time"
+            id="event-time"
+            class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+          />
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">Color</label>
+            <select
+              id="event-color"
+              class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            >
+              <option value="bg-indigo-500">Indigo</option>
+              <option value="bg-yellow-500">Yellow</option>
+              <option value="bg-green-500">Green</option>
+              <option value="bg-red-500">Red</option>
+              <option value="bg-pink-500">Pink</option>
+            </select>
+          </div>
+          <div class="flex gap-3 mt-6">
+            <button
+              data-action="closeModal"
+              class="flex-1 py-3 rounded-lg hover:bg-white/5 transition"
+            >
+              Cancel
+            </button>
+            <button
+              data-action="saveNewEvent"
+              class="flex-1 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+            >
+              Add Event
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Task Modal -->
+      <div
+        id="addTaskModal"
+        class="modal-content card w-full max-w-md p-6 hidden my-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">Add New Task</h3>
+        <div class="space-y-4">
+          <textarea
+            id="task-text"
+            class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500 resize-none"
+            placeholder="Task description"
+            rows="3"
+          ></textarea>
+          <div class="flex gap-3 mt-6">
+            <button
+              data-action="closeModal"
+              class="flex-1 py-3 rounded-lg hover:bg-white/5 transition"
+            >
+              Cancel
+            </button>
+            <button
+              data-action="saveNewTask"
+              class="flex-1 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+            >
+              Add Task
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Bookmark Modal -->
+      <div
+        id="addBookmarkModal"
+        class="modal-content card w-full max-w-md p-6 hidden my-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">Add Bookmark Folder</h3>
+        <div class="space-y-4">
+          <input
+            type="text"
+            id="bookmark-name"
+            class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            placeholder="Folder Name"
+          />
+          <div class="flex gap-3 mt-6">
+            <button
+              data-action="closeModal"
+              class="flex-1 py-3 rounded-lg hover:bg-white/5 transition"
+            >
+              Cancel
+            </button>
+            <button
+              data-action="saveNewBookmark"
+              class="flex-1 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+            >
+              Add Folder
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Modal -->
+      <div
+        id="settingsModal"
+        class="modal-content card w-full max-w-md p-6 hidden my-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">Settings</h3>
+        <div class="space-y-6">
+          <div>
+            <label class="block text-sm text-gray-400 mb-2">User Name</label>
+            <input
+              type="text"
+              id="setting-name"
+              class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400 mb-2"
+              >Search Engine</label
+            >
+            <select
+              id="setting-engine"
+              class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            >
+              <option value="google">Google</option>
+              <option value="duckduckgo">DuckDuckGo</option>
+              <option value="bing">Bing</option>
+              <option value="brave">Brave</option>
+            </select>
+          </div>
+          <div class="pt-4 border-t border-white/10">
+            <button
+              data-action="factoryReset"
+              class="w-full py-3 border border-red-500/50 text-red-500 rounded-lg hover:bg-red-500/10 transition font-bold"
+            >
+              Reset All Data
+            </button>
+          </div>
+          <div class="flex gap-3">
+            <button
+              data-action="closeModal"
+              class="w-full py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Modal -->
+      <div
+        id="profileModal"
+        class="modal-content card w-full max-w-md p-6 hidden my-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">Profile</h3>
+        
+        <!-- Auth Section -->
+        <div id="auth-section" class="mb-6 p-4 bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center text-center">
+          <div id="logged-in-view" class="hidden w-full flex-col items-center">
+            <img id="auth-avatar" src="" class="w-16 h-16 rounded-full mb-3 shadow-lg" alt="Profile" />
+            <p id="auth-name" class="font-bold text-lg">Name</p>
+            <p id="auth-email" class="text-xs text-gray-400 mb-4">email@example.com</p>
+            <button data-action="signOutGoogle" class="py-2 px-6 border border-red-500/50 text-red-500 rounded-lg hover:bg-red-500/10 transition font-bold text-sm w-full">Sign Out</button>
+          </div>
+          <div id="logged-out-view" class="w-full flex-col items-center">
+            <div class="w-12 h-12 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center mb-3 mx-auto">
+              <i data-lucide="cloud" class="w-6 h-6"></i>
+            </div>
+            <p class="text-sm text-gray-400 mb-4">Sign in to sync your dashboard across devices</p>
+            <button data-action="signInGoogle" class="w-full py-3 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition font-bold flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>
+              Sign in with Google
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div
+            id="user-avatar-large"
+            class="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white text-2xl mx-auto hidden"
+          >
+            D
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">Local Profile Name</label>
+            <input
+              type="text"
+              id="profile-name"
+              class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">Role</label>
+            <input
+              type="text"
+              id="profile-role"
+              class="w-full bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+              placeholder="Developer"
+            />
+          </div>
+          <div class="flex gap-3 mt-6">
+            <button
+              data-action="closeModal"
+              class="flex-1 py-3 rounded-lg hover:bg-white/5 transition"
+            >
+              Cancel
+            </button>
+            <button
+              data-action="saveProfile"
+              class="flex-1 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects View All Modal -->
+      <div
+        id="projectsViewModal"
+        class="modal-content card w-full max-w-2xl p-6 hidden my-auto max-h-[80vh] overflow-y-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">All Projects</h3>
+        <div id="projects-view-list" class="space-y-4">
+          <!-- Dynamic content -->
+        </div>
+        <button
+          data-action="closeModal"
+          class="w-full mt-6 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+        >
+          Close
+        </button>
+      </div>
+
+      <!-- Bookmarks View All Modal -->
+      <div
+        id="bookmarksViewModal"
+        class="modal-content card w-full max-w-2xl p-6 hidden my-auto max-h-[80vh] overflow-y-auto"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold">All Bookmarks</h3>
+          <button
+            data-action="openModal" data-arg="addBookmarkModal"
+            class="text-indigo-400 hover:underline text-sm"
+          >
+            + Add Folder
+          </button>
+        </div>
+        <div id="bookmarks-view-list" class="space-y-4">
+          <!-- Dynamic content -->
+        </div>
+        <button
+          data-action="closeModal"
+          class="w-full mt-6 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+        >
+          Close
+        </button>
+      </div>
+
+      <!-- Bookmark Folder Contents Modal -->
+      <div
+        id="bookmarkFolderModal"
+        class="modal-content card w-full max-w-2xl p-6 hidden my-auto max-h-[80vh] overflow-y-auto"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <button
+            data-action="openModal" data-arg="bookmarksViewModal"
+            class="text-indigo-400 hover:underline"
+          >
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          </button>
+          <h3 id="folder-title" class="text-xl font-bold">Folder Contents</h3>
+        </div>
+        <div id="folder-contents" class="space-y-2 mb-6">
+          <!-- Dynamic content -->
+        </div>
+        <div class="flex gap-3">
+          <input
+            type="text"
+            id="new-bookmark-url"
+            class="flex-1 bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            placeholder="Add new bookmark URL"
+          />
+          <input
+            type="text"
+            id="new-bookmark-title"
+            class="flex-1 bg-white/5 border border-white/10 rounded-lg p-3 outline-none focus:border-indigo-500"
+            placeholder="Title"
+          />
+          <button
+            data-action="addBookmarkLink"
+            class="px-4 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+          >
+            Add
+          </button>
+        </div>
+        <button
+          data-action="closeModal"
+          class="w-full mt-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition font-bold"
+        >
+          Back
+        </button>
+      </div>
+
+      <!-- Tools Modal -->
+      <div
+        id="toolsModal"
+        class="modal-content card w-full max-w-2xl p-6 hidden my-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">Tools</h3>
+        <p class="text-gray-400 mb-4">
+          Useful tools and utilities for developers.
+        </p>
+        <div class="grid grid-cols-2 gap-4">
+          <a
+            href="https://github.com"
+            target="_blank"
+            class="p-4 border border-white/10 rounded-lg hover:bg-white/5 transition flex items-center gap-3"
+          >
+            <i data-lucide="github" class="w-6 h-6 text-indigo-400"></i>
+            <span>GitHub</span>
+          </a>
+          <a
+            href="https://stackoverflow.com"
+            target="_blank"
+            class="p-4 border border-white/10 rounded-lg hover:bg-white/5 transition flex items-center gap-3"
+          >
+            <i data-lucide="help-circle" class="w-6 h-6 text-orange-400"></i>
+            <span>Stack Overflow</span>
+          </a>
+          <a
+            href="https://caniuse.com"
+            target="_blank"
+            class="p-4 border border-white/10 rounded-lg hover:bg-white/5 transition flex items-center gap-3"
+          >
+            <i data-lucide="globe" class="w-6 h-6 text-blue-400"></i>
+            <span>Can I Use</span>
+          </a>
+          <a
+            href="https://regex101.com"
+            target="_blank"
+            class="p-4 border border-white/10 rounded-lg hover:bg-white/5 transition flex items-center gap-3"
+          >
+            <i data-lucide="zap" class="w-6 h-6 text-yellow-400"></i>
+            <span>Regex101</span>
+          </a>
+        </div>
+        <button
+          data-action="closeModal"
+          class="w-full mt-6 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+        >
+          Close
+        </button>
+      </div>
+
+      <!-- Notes Modal -->
+      <div
+        id="notesModal"
+        class="modal-content card w-full max-w-2xl p-6 hidden my-auto"
+      >
+        <h3 class="text-xl font-bold mb-4">Notes</h3>
+        <textarea
+          id="notes-text"
+          class="w-full bg-white/5 border border-white/10 rounded-lg p-4 outline-none focus:border-indigo-500 resize-none"
+          placeholder="Write your notes here..."
+          rows="8"
+        ></textarea>
+        <div class="flex gap-3 mt-4">
+          <button
+            data-action="closeModal"
+            class="flex-1 py-3 rounded-lg hover:bg-white/5 transition"
+          >
+            Cancel
+          </button>
+          <button
+            data-action="saveNotes"
+            class="flex-1 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition font-bold"
+          >
+            Save Notes
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="lib/lucide.min.js"></script>
+    <script src="js/bundle.js"></script>
+  </body>
+</html>

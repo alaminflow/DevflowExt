@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Development Binaries
+tailwindcss-linux-x64
+tailwindcss-macos-arm64
+tailwindcss-macos-x64
+tailwindcss-windows-x64.exe
+
+# Build Artifacts
+# Note: We are committing js/bundle.js and css/tailwind.min.css 
+# so users can install the extension directly from the repo without building.
+
+# System Files
+.DS_Store
+Thumbs.db
