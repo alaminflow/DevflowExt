@@ -31,5 +31,11 @@
       "email",
       "profile"
     ]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "devflow@devflow.local",
+      "strict_min_version": "109.0"
+    }
   }
 }

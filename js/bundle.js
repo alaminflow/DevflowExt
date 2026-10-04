@@ -35098,8 +35098,10 @@ This typically indicates that your device does not have a healthy Internet conne
       `
         ).join("") : '<p class="text-gray-600 text-sm py-2">No upcoming events</p>';
         const prList = document.getElementById("projects-list");
-        prList.innerHTML = p2.projects.length ? p2.projects.map(
-          (pr2, i2) => `
+        let activeProjectsHTML = "";
+        p2.projects.forEach((pr2, i2) => {
+          if (pr2.progress < 100) {
+            activeProjectsHTML += `
           <div class="group project-item">
               <div class="flex justify-between items-start mb-2">
                   <div>
@@ -35115,8 +35117,10 @@ This typically indicates that your device does not have a healthy Internet conne
                   <div class="progress-fill" style="width: ${pr2.progress}%"></div>
               </div>
           </div>
-      `
-        ).join("") : '<p class="text-gray-600 text-sm py-2">No active projects</p>';
+      `;
+          }
+        });
+        prList.innerHTML = activeProjectsHTML ? activeProjectsHTML : '<p class="text-gray-600 text-sm py-2">No active projects</p>';
         const prViewList = document.getElementById("projects-view-list");
         prViewList.innerHTML = p2.projects.length ? p2.projects.map(
           (pr2, i2) => `

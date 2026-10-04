@@ -468,10 +468,10 @@ function renderProfile() {
 
   // Render Projects
   const prList = document.getElementById("projects-list");
-  prList.innerHTML = p.projects.length
-    ? p.projects
-        .map(
-          (pr, i) => `
+  let activeProjectsHTML = "";
+  p.projects.forEach((pr, i) => {
+    if (pr.progress < 100) {
+      activeProjectsHTML += `
           <div class="group project-item">
               <div class="flex justify-between items-start mb-2">
                   <div>
@@ -487,10 +487,10 @@ function renderProfile() {
                   <div class="progress-fill" style="width: ${pr.progress}%"></div>
               </div>
           </div>
-      `
-        )
-        .join("")
-    : '<p class="text-gray-600 text-sm py-2">No active projects</p>';
+      `;
+    }
+  });
+  prList.innerHTML = activeProjectsHTML ? activeProjectsHTML : '<p class="text-gray-600 text-sm py-2">No active projects</p>';
 
   // Render Projects View All
   const prViewList = document.getElementById("projects-view-list");
