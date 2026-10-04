@@ -256,6 +256,7 @@ function loadState() {
   const saved = localStorage.getItem("devflow_state");
   if (saved) {
     state = JSON.parse(saved);
+    state.editMode = false;
   }
 }
 
@@ -296,6 +297,7 @@ function setupAuth() {
           const cloudState = docSnap.data();
           if(JSON.stringify(state) !== JSON.stringify(cloudState)) {
              state = cloudState;
+             state.editMode = false;
              localStorage.setItem("devflow_state", JSON.stringify(state));
              renderProfile(); // re-render UI based on new state
           }
