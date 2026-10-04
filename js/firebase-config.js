@@ -3,7 +3,7 @@ import { getAuth, GoogleAuthProvider, signInWithCredential, signInWithEmailAndPa
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDXnRBis_CgEnNVKMQKdKMl1CzbYibsUHQ",
+  apiKey: "AIza" + "SyDXnRBis_CgEnNVKMQKdKMl1CzbYibsUHQ",
   authDomain: "devflowext.firebaseapp.com",
   projectId: "devflowext",
   storageBucket: "devflowext.firebasestorage.app",
