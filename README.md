@@ -1,7 +1,8 @@
 # DevFlow Extension
 
 <p align="center">
-  <img src="store-assets/screenshot1.png" alt="DevFlow Dashboard" width="100%">
+  <img src="store-assets/devflow1.png" alt="DevFlow Dashboard" width="100%">
+  <img src="store-assets/devflow2.png" alt="DevFlow Dashboard" width="100%">
 </p>
 
 A beautifully designed, personal developer dashboard that replaces your Chrome New Tab page. Built with HTML, Tailwind CSS, and vanilla JavaScript. Features offline-first real-time cloud syncing via Firebase Firestore.
