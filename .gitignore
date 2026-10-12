@@ -15,3 +15,6 @@ tailwindcss-windows-x64.exe
 # System Files
 .DS_Store
 Thumbs.db
+
+# Keys & Secrets
+*.pem

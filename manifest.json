@@ -2,7 +2,8 @@
   "manifest_version": 3,
   "name": "DevFlow",
   "version": "1.0.0",
-  "description": "Your personal developer dashboard. Quick links, projects, todos, bookmarks, weather \u2014 all synced across devices.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvbnlDJu3wKLUPvLnTFop2HmBw1ggfNgLQUbkRy2lqUclY4twBfJK1fqC1nqi95rfT/5d9k2yJhFbaNqrGQGtt10VCK4ob6x0DXbEKU5OfhJ4JHX0TW+WL8R0Ik+Q3HKArQeQoWVNT+7rusQfoEPX5JViWHUwP5HqXRmXvmnwRNUydrTAnbLo3ZAQN0hUgYyca5kJPUYGAxTNNYvuJyNBZ8QJM2tNQZ/orsOcg0SxgFR/J+ivlzx/E+KQIau00KV6o6ScbX/MCPN/Lo/3zv9kKCAeSu+BBNssHvphKtSI+GZ5jkSIDu0RdEf8GeuYlVz83F+dTMW8KLtOtiK7AVIKZwIDAQAB",
+  "description": "Your personal developer dashboard. Quick links, projects, todos, bookmarks, weather — all synced across devices.",
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
