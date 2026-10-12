@@ -1,5 +1,5 @@
 # DevFlow Extension
-  A extension for Developers to keep their needed bookmarks organized and saved in cloud, a good dashboard for daily developers life.
+  A extension for Developers to keep their needed bookmarks organized and saved in cloud, a complete dashboard for daily developers workflow.
 
 <p align="center">
   <img src="store-assets/devflow1.png" alt="DevFlow Dashboard" width="100%">
